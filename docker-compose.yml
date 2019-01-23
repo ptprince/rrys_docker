@@ -1,0 +1,24 @@
+version: "3"
+volumes:
+  rrys_data:
+    driver_opts:
+      type: none
+      # change to your directory
+      device: /home/source/rrys
+      o: bind
+services:
+  rrys:
+    build: .
+    container_name: "rrys"
+    volumes:
+      # change /home/source/rrys to your host directory
+      - rrys_data:/opt/work/store
+
+  nginx:
+    image: nginx:latest
+    links:
+      - rrys:rrys
+    volumes:
+      - ./nginx/conf.d:/etc/nginx/conf.d
+    ports:
+      - "80:80"
